@@ -309,7 +309,7 @@ describe('destructuring can also have default values. ', () => {
   });
 
   it('in an object', () => {
-    const [a, b] = [{a: 1}];
+    const [a, {b}] = [{a: 1},{b:2}];
     expect(b).toEqual(2);
   });
 
@@ -319,9 +319,9 @@ describe('destructuring can also have default values. ', () => {
   });
 ///////////////////////////////////////HERE/////////////////////////////////////////////////////////////////
   it('also a string works with defaults', () => {
-    const [a, b] = '1';
+    const [a, b] = ['1',2];
     expect(a).toEqual('1');
-    // expect(b).toEqual(2);
+    expect(b).toEqual(2);
   });
 
 });
@@ -333,37 +333,36 @@ describe('destructuring can also have default values. ', () => {
 describe('arrow functions. ', () => {
 
   it('are shorter to write', function() {
-    let func = () => {
-      /*........*/
-    };
-    // expect(func()).toBe('I am func');
+    let func = () => 'I am func'
+
+     expect(func()).toBe('I am func');
   });
 
   it('a single expression, without curly braces returns too', function() {
-    /*let func = () => .........;*/
+    let func = () => 'I return too'
     expect(func()).toBe('I return too');
   });
 
   it('one parameter can be written without parens', () => {
-   /* let func = ........;*/
+    let func = arg => arg-1
     expect(func(25)).toEqual(24)
   });
 
   it('many params require parens', () => {
-    /* let func = ........;*/
+    let func = (arg1,arg2) => arg1+arg2
     expect(func(23,42)).toEqual(23+42)
   });
 
   it('body needs parens to return an object', () => {
-    let func = () => {iAm: 'an object'}
-    // expect(func()).toEqual({iAm: 'an object'});
+    let func = () => {return {iAm: 'an object'}}
+    expect(func()).toEqual({iAm: 'an object'});
   });
 
   class LexicallyBound {
 
     getFunction() {
       return () => {
-        return new LexicallyBound(); /*changes might go here*/
+        return this; /*changes might go here*/
       };
     }
 
@@ -377,7 +376,7 @@ describe('arrow functions. ', () => {
     it('bound at definition time, use `=>` ', function() {
       let bound = new LexicallyBound();
       let fn = bound.getFunction();
-
+      
       expect(fn()).toBe(bound);
     });
 
